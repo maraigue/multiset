@@ -27,6 +27,7 @@ Gem::Specification.new do |s|
     "lib/multiset.rb",
     "lib/multiset/libmultimap.rb",
     "lib/multiset/libmultiset.rb",
+    "multiset.gemspec",
     "spec/multiset_spec.rb",
     "spec/spec_helper.rb"
   ]

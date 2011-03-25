@@ -1,6 +1,7 @@
 = multiset
 
-Description goes here.
+Ruby implementation of multiset. Unlike ordinary set(see Ruby documentation for "set" library), multiset can contain two or more same items.
+For details, see http://maraigue.hhiro.net/multiset/ .
 
 == Contributing to multiset
  
