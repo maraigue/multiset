@@ -15,10 +15,10 @@ Jeweler::Tasks.new do |gem|
   gem.name = "multiset"
   gem.homepage = "http://github.com/maraigue/multiset"
   gem.license = "MIT"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
+  gem.summary = %Q{Multiset library for Ruby}
+  gem.description = %Q{Ruby implementation of multiset. Unlike ordinary set(see Ruby documentation for "set" library), multiset can contain two or more same items.}
   gem.email = "main@hhiro.net"
-  gem.authors = ["maraigue"]
+  gem.authors = ["H.Hiro(Maraigue)"]
   # Include your dependencies below. Runtime dependencies are required when using your gem,
   # and development dependencies are only needed for development (ie running rake tasks, tests, etc)
   #  gem.add_runtime_dependency 'jabber4r', '> 0.1'
