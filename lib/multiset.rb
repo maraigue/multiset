@@ -1,3 +1,7 @@
+#!/usr/bin/env ruby
+
+VERSION = "0.4.0"
+
 #Rubyによる多重集合（マルチセット）・多重連想配列（マルチマップ）の実装です。
 #
 #Ruby implementation of multiset and multimap.
@@ -41,6 +45,15 @@
 #  * Multiset#to_sの実装が誤っていたのを修正。
 #* Version 0.202(beta) (2008/4/23)
 #  * GNU LGPLの文書を添付していなかったので追加。申し訳ありません。
+#* Version 0.3 (2011/3/24)
+#  * Rubygemsでの公開を開始。
+#* Version 0.4 (2012/8/25)
+#  * Rubygemsへの公開版にテストケースを追加。
+#  * Multiset.parse_string、Multiset.parse_string?メソッドを削除。
+#    * Ruby1.9でString#eachが削除されたため。
+#      文字列を行単位で区切ってMultisetにしたい場合は、Multiset.parse_forceを
+#      ご利用下さい。
+#  * Multiset.from_linesメソッドを新設。（文字列のみ渡せます。挙動はMultiset.parse_forceと同じです）
 #<em></em>
 #* Version 0.10(2008/2/9)
 #  * First distribution.
@@ -71,30 +84,23 @@
 #  * [Fixed] Wrong implementation of Multiset#to_s
 #* Version 0.202(beta) (2008/4/23)
 #  * Added the text of GNU LGPL to the archive. I'm very sorry...
+#* Version 0.3 (2011/3/24)
+#  * Released for Rubygems
+#* Version 0.4 (2012/8/25)
+#  * [Added] Test codes
+#  * [Removed] Multiset.parse_string, Multiset.parse_string?
+#    * Because Ruby 1.9 does not support String#each
+#    * Multiset.parse_force is still available.
+#  * [Added] Multiset.from_lines (equivalent to Multiset.parse_force, but only a string is accepted)
 #
 #==著作権表示(Copyright)
 #
-#Author::    Maraigue(http://f52.aaa.livedoor.jp/~maraigue/)
+#Author::    H.Hiro(Maraigue) (http://hhiro.net/)
 #Version::   0.202(beta) (2008/4/23)
-#Copyright:: (C)2008 Maraigue
+#Copyright:: (C)2008 H.Hiro(Maraigue)
 #
-#このプログラムはBSDライセンスにて提供する 無 保 証 のプログラムです。
-#詳細はBSDLicense.txtをご覧下さい。
-#
-#日本語の参考訳は以下のURLにあります。
-#http://sourceforge.jp/projects/opensource/wiki/licenses%2Fnew_BSD_license
-#ただし、法的にはBSDLicense.txtに書かれた英語の文章のみが有効です。
-#
-#setup.rbはMinero Aoki氏（http://i.loveruby.net/）の制作です。
-#setup.rbのみは、GNU LGPL(version 2.1)のライセンスが適用されます。
-#GNU LGPLについてはGNU_LGPL.txtをご覧下さい。
-#
-#This program is distributed with ABSOLUTELY NO WARRANTY, under BSD License.
-#See BSDLicense.txt for more detail.
-#
-#setup.rb is made by Minero Aoki(http://i.loveruby.net/).
-#Only setup.rb is distributed under GNU LGPL(version 2.1).
-#See GNU_LGPL.txt for more detail.
+#このプログラムはMITライセンスにて提供する 無 保 証 のプログラムです。
+#This program is distributed with ABSOLUTELY NO WARRANTY, under MIT License.
 
 require 'multiset/libmultiset'
 require 'multiset/libmultimap'

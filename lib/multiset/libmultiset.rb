@@ -17,9 +17,10 @@
 #* <code>Set[:a,:b,:c,:b,:b,:c] => #<Set: {:b, :c, :a}></code>
 #* <code>Multiset[:a,:b,:c,:b,:b,:c] => #<Multiset:<tt>#</tt>3 :b, <tt>#</tt>2 :c, <tt>#</tt>1 :a></code>
 
+require "enumerator"
+
 class Multiset
 	include Enumerable
-	@@parse_string = true
 	
 	#--
 	# Constructors
@@ -84,20 +85,10 @@ class Multiset
 	#   results equal to Multiset#new .
 	# * Otherwise, <code>ArgumentError</code> is raised.
 	def Multiset.parse(object)
-		if !@@parse_string && object.kind_of?(String)
-			raise ArgumentError, "Multiset.parse can not parse strings"
+		if object.kind_of?(String)
+			raise ArgumentError, "Multiset.parse can not parse strings. If you would like to store string lines to a multiset, use Multiset.from_lines(string)."
 		end
-		Multiset.parse_force(object)
-	end
-	
-	# Multiset.parseと同様ですが、挙動がMultiset.parse_stringの設定に
-	# 影響されません（<code>Multiset.parse_string(true)</code>の場合と
-	# 同様とみなします）。
-	# 
-	# Same as Multiset.parse, but this method is not affected
-	# by the setting of Multiset.parse_string (treats
-	# <code>Multiset.parse_string(true)</code>) .
-	def Multiset.parse_force(object)
+    
 		if object.instance_of?(Multiset)
 			ret = object.dup
 		else
@@ -111,55 +102,26 @@ class Multiset
 			end
 		end
 		ret
+  end
+	
+	# 文字列を行単位で区切ってMultisetにします。
+  # 
+  # Generates a Multiset from string, separated by lines.
+	def Multiset.from_lines(str)
+    Multiset.new(str.enum_for(:each_line))
 	end
 	
-	# Multiset.parseの引数にStringを渡すことを許すか指定します。
-	# 
-	# StringはEnumerableなので、Multiset.parseでは引数として文字列を
-	# 渡すこともできます。しかしこれはバグの危険性があるため、
-	# このメソッドで禁止することができます。
-	# 
-	# <code>boolean</code>にはtrueおよびfalseが指定できます。
-	# falseを設定した場合、Multiset.parseやMultimap#[]=などで
-	# 文字列を直接指定した場合に<code>ArgumentError</code>が発生します。
-	# デフォルト値は<code>true</code>です。
-	# 
-	# <code>boolean</code>を省略した場合は、現在のこの値がtrueか
-	# falseかを返します。
-	# 
-	# この値はクラス変数で管理されているので、一度変更するとすべての
-	# インスタンスに影響が及びます。
-	# 
-	# Allows or prohibits Strings from being arguments of Multiset.parse .
-	# 
-	# String includes module Enumerable, therefore you can give a string as
-	# an argument of Multiset.parse . But this may cause bugs,
-	# so you can prohibit this.
-	# 
-	# <code>boolean</code> can be true or false. If this value is false,
-	# <code>ArgumentError</code> is raised whenever you specify a string
-	# as an argument of Multiset.parse , Multimap#[]= , and so on.
-	# This value is <code>true</code> by default.
-	# 
-	# If <code>boolean</code> is not specified, returns current value
-	# (true or false).
-	# 
-	# This value is stored in class variable, therefore this value has
-	# effect for all instances of Multiset.
-	def Multiset.parse_string(boolean = nil)
-		case boolean
-		when true, false
-			@@parse_string = boolean
-		when nil
-		else
-			raise ArgumentError, "Argument must be true or false"
+  # 文字列が渡された場合は、Multiset.from_linesと同じ挙動。
+  # それ以外の場合は、Multiset.parseと同じ挙動。
+  # 
+  # If a string is given, it works as Multiset.from_lines,
+  # otherwise as Multiset.parse.
+	def Multiset.parse_force(object)
+		if object.kind_of?(String)
+			Multiset.from_lines(object)
+    else
+      Multiset.parse(object)
 		end
-		@@parse_string
-	end
-	
-	# Same as Multiset.parse_string
-	def	Multiset.parse_string?(boolean = nil)
-		Multiset.parse_string boolean
 	end
 	
 	# <code>self</code>の複製を生成して返します。
