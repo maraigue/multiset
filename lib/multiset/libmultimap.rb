@@ -1,3 +1,6 @@
+#!/usr/bin/env ruby
+# -*- coding: utf-8 -*-
+
 #==概要(Basic information)
 #
 #Rubyによる多重連想配列（マルチマップ）の実装です。

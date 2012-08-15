@@ -128,6 +128,130 @@ describe Multiset do
       tmp.should == Multiset.new(%w'a a a a b b')
     end
   end
+  
+  # Iteration methods
+  describe "being iterated for entries" do
+    before do
+      @ms = Multiset.new(%w'a a b b b b c d d d')
+    end
+    
+    it "should have the same result between Multiset\#{all?, any?, none?, one?} and Enumerable\#{all?, any?, none?, one?}" do
+      @ms.all?{ |x| x == "a" }.should be_false
+      @ms.any?{ |x| x == "a" }.should be_true
+      @ms.none?{ |x| x == "a" }.should be_false
+      @ms.none?{ |x| x.instance_of?(Integer) }.should be_true
+      @ms.one?{ |x| x == "a" }.should be_false
+      @ms.one?{ |x| x == "c" }.should be_true
+    end
+    
+    it "should have the same result between Multiset#count and Enumerable#count" do
+      @ms.count("a").should == 2
+      @ms.count("x").should == 0
+      @ms.count.should == 10
+      @ms.count{ |x| x == "b" }.should == 4
+    end
+    
+    it "should find an items by the specified condition with Multiset#find / Multiset#detect" do
+      @ms.find{ |item| item =~ /d/ }.should == "d"
+    end
+    
+    it "should find an item by the specified condition with Multiset#find_with / Multiset#detect_with" do
+      @ms.find_with{ |item, count| count == 2 }.should == "a"
+    end
+    
+    it "should find an items by the specified condition with Multiset#find_all / Multiset#select" do
+      @ms.find_all{ |item| item =~ /d/ }.should == Multiset.new(%w[d d d])
+    end
+    
+    it "should find an items by the specified condition with Multiset#find_all_with / Multiset#select_with" do
+      @ms.find_all_with{ |item, count| count <= 2 }.should == Multiset.new(%w[a a c])
+    end
+    
+    it "should find an items by the specified condition with Multiset#reject" do
+      @ms.reject{ |item| item =~ /d/ }.should == Multiset.new(%w[a a b b b b c])
+    end
+    
+    it "should find an items by the specified condition with Multiset#reject!" do
+      @ms.reject!{ |item| item =~ /x/ }.should be_nil
+      @ms.reject!{ |item| item =~ /d/ }.object_id.should == @ms.object_id
+      @ms.should == Multiset.new(%w[a a b b b b c])
+    end
+    
+    it "should find an items by the specified condition with Multiset#delete_if" do
+      @ms.delete_if{ |item| item =~ /x/ }.object_id.should == @ms.object_id
+      @ms.delete_if{ |item| item =~ /d/ }.object_id.should == @ms.object_id
+      @ms.should == Multiset.new(%w[a a b b b b c])
+    end
+    
+    it "should find an items by the specified condition with Multiset#reject_with" do
+      @ms.reject_with{ |item, count| item =~ /d/ || count > 3 }.should == Multiset.new(%w[a a c])
+    end
+    
+    it "should find an items by the specified condition with Multiset#grep" do
+      @ms.grep(/d/).should == Multiset.new(%w[d d d])
+      @ms.grep(/d/){ |item| item + "x" }.should == Multiset.new(%w[dx dx dx])
+    end
+    
+    it "should repeat for items by the specified condition with Multiset#inject_with / Multiset#reduce_with" do
+      result = @ms.inject_with({ :item_sum => "", :count_sum => 0 }) do |obj, item, count|
+        obj[:item_sum] += item
+        obj[:count_sum] += count
+        obj
+      end
+      result[:item_sum].each_char.sort.should == %w[a b c d]
+      result[:count_sum].should == 10
+    end
+    
+    it "should return a new Multiset by the specified condition with Multiset#map / Multiset#collect" do
+      @ms.map{ |item| item * 2 }.should == Multiset.new(%w'aa aa bb bb bb bb cc dd dd dd')
+    end
+    
+    it "should return a new Multiset by the specified condition with Multiset#map_with / Multiset#collect_with" do
+      @ms.map_with{ |item, count| [item * 2, count * 2] }.should == Multiset.new(%w'aa aa aa aa bb bb bb bb bb bb bb bb cc cc dd dd dd dd dd dd')
+    end
+    
+    it "should return the maximum/mininum value by max/min/minmax" do
+      @ms.max.should == "d"
+      @ms.min.should == "a"
+      @ms.minmax.should == %w[a d]
+      @ms.max{ |a, b| b <=> a }.should == "a"
+      @ms.min{ |a, b| b <=> a }.should == "d"
+      @ms.minmax{ |a, b| b <=> a }.should == %w[d a]
+    end
+    
+    it "should return the maximum/mininum value by max_by/min_by/minmax_by" do
+      @ms.max_by{ |item| item }.should == "d"
+      @ms.min_by{ |item| item }.should == "a"
+      @ms.minmax_by{ |item| item }.should == %w[a d]
+    end
+    
+    it "should return the maximum/mininum value by max_with/min_with/minmax_with" do
+      @ms.max_with{ |a_item, a_count, b_item, b_count| a_count <=> b_count }.should == "b"
+      @ms.max_with{ |a_item, a_count, b_item, b_count| b_count <=> a_count }.should == "c"
+      @ms.min_with{ |a_item, a_count, b_item, b_count| a_count <=> b_count }.should == "c"
+      @ms.min_with{ |a_item, a_count, b_item, b_count| b_count <=> a_count }.should == "b"
+      @ms.minmax_with{ |a_item, a_count, b_item, b_count| a_count <=> b_count }.should == %w[c b]
+    end
+    
+    it "should return the maximum/mininum value by max_by_with/min_by_with/minmax_by_with" do
+      @ms.max_by_with{ |item, count| count }.should == "b"
+      @ms.min_by_with{ |item, count| count }.should == "c"
+      @ms.minmax_by_with{ |item, count| count }.should == %w[c b]
+    end
+    
+    it "should return sorted array by Multiset#sort / Multiset#sort_with" do
+      @ms.sort.should == %w[a a b b b b c d d d]
+      @ms.sort{ |a, b| b <=> a }.should == %w[d d d c b b b b a a]
+      fail "Methods in Enumerable should not be called"
+      @ms.sort_with{ |a_item, a_count, b_item, b_count| b_count <=> a_count }.should == %w[b b b b d d d a a c]
+    end
+    
+    it "should return sorted array by Multiset#sort_by / Multiset#sort_by_with" do
+      @ms.sort_by{ |item| item }.should == %w[a a b b b b c d d d]
+      fail "Methods in Enumerable should not be called"
+      @ms.sort_by_with{ |item, count| count }.should == %w[c a a d d d b b b b]
+    end
+  end
 
   # Updating methods
   describe "being updated" do

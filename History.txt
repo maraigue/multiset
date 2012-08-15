@@ -1,6 +1,100 @@
-=== 1.0.0 / 2012-08-05
+=== 0.1.0 / 2008-02-09
 
-* 1 major enhancement
+* First distribution.
 
-  * Birthday!
+=== 0.1.1 / 2008-02-12
 
+* [Fixed] Wrong implementation of Multiset#&
+* [Fixed] Wrong documentation
+
+=== 0.1.2 / 2008-02-16
+
+* [Fixed] Removing redundant process in Hash#to_multiset
+* [Added] Methods: map, map!, collect, collect!, map_with, map_with! on Multiset
+  * As a result, what Multiset#map and other methods do has changed.
+    (As of version 0.11, Multiset#map returns an array, because
+    Multiset#map means Enumerable#map.)
+
+=== 0.1.3 / 2008-03-01
+
+* Made setup.rb(http://i.loveruby.net/en/projects/setup/) be avaliable.
+
+=== 0.1.3.1 / 2008-03-02
+
+* [Fixed] Wrong documentation
+
+=== 0.2.0 / 2008-03-23
+
+* [Added] Multimap class, Hash#to_multimap, Hash#multimap
+* [Added] Multiset.parse, Multiset.parse_force, Multiset.parse_string, Multiset.parse_string?
+* [Changed] In Multiset#==, if the argument is not an instance of Multiset,
+  Multiset#== always returns false.
+* [Changed] In Multiset#subset?, Multiset#superset?, Multiset#proper_subset?
+  and Multiset#proper_superset?, if the argument is not an instance of Multiset,
+  those methods always raise ArgumentError.
+
+=== 0.2.0.1 / 2008-03-25
+
+* [Changed] Multiset#classify, Multiset#classify_with returns a Multimap.
+* [Added] Multimap#to_s, Multimap#inspect (No document)
+* [Fixed] Wrong implementation of Multiset#to_s
+
+=== 0.2.0.2 / 2008-04-23
+
+* Added the text of GNU LGPL to the archive (for setup.rb)
+
+=== 0.3.0 / 2011-3-24
+
+* Released for Rubygems
+
+=== 0.4.0 / 2012-08-05
+
+* [Added] Test codes
+* [Removed] Multiset.parse_string, Multiset.parse_string?
+  * Because Ruby 1.9 does not support String#each
+  * Multiset.parse_force is still available.
+* [Added] Multiset.from_lines (equivalent to Multiset.parse_force, but only a string is accepted)
+* [Fixed] Multiset#count behaves like the method in Enumerable: you can give it a block.
+* [Fixed] Multiset#each, Multiset#each_item, Multiset#each_pair: they return an Enumerator if no block is given.
+* [Added] Some aliases (to fit with the methods in Enumerable)
+  * Multiset#sample (alias of Multiset#rand)
+  * Multiset#group_by (alias of Multiset#classify)
+  * Multiset#group_by_with (alias of Multiset#classify_with)
+* [Added] Iteration methods which gives pairs of items/counts
+  * Multiset#find_with, Multiset#detect_with
+  * Multiset#find_all_with, Multiset#select_with
+  * Multiset#reject_with
+  * Multiset#inject_with, Multiset#reduce_with
+  * Multiset#max_with
+  * Multiset#min_with
+  * Multiset#minmax_with
+  * Multiset#max_by_with
+  * Multiset#min_by_with
+  * Multiset#minmax_by_with
+  * Multiset#sort_with
+  * Multiset#sort_by_with
+* [Modified] The following methods are to return a Multiset rather than an Array since version 0.4.0.
+  * Multiset#map, Multiset#collect
+  * Multiset#map!, Multiset#collect!
+  * Multiset#find_all, Multiset#select
+  * Multiset#grep
+  * Multiset#reject
+* [Modified] The following methods are to return a Multimap rather than a Hash of Arrays since version 0.4.0.
+  * Multiset#group_by (returned as a result of becoming an alias of Multiset#classify)
+* [Modified] The following methods are to scan the Multiset for each (non-duplicated) elements since 0.4.0, that is, the same behavior as Multiset#each_item. For example, Multiset[:a, :a, :a, :b].map{ ... } calls the block for only twice, which is 4 times in the old behavior.
+  * Multiset#map, Multiset#collect
+  * Multiset#map!, Multiset#collect!
+  * Multiset#find_all, Multiset#select
+  * Multiset#grep
+  * Multiset#reject
+  * Multiset#reject!
+  * Multiset#delete_if
+  * Multiset#classify
+  * Multiset#max
+  * Multiset#min
+  * Multiset#minmax
+  * Multiset#max_by
+  * Multiset#min_by
+  * Multiset#minmax_by
+  * Multiset#sort
+  * Multiset#sort_by
