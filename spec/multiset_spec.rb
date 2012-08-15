@@ -44,10 +44,10 @@ describe Multiset do
     end
   end
   
-	it "should be replaced by another Multiset by Multiset#replace" do
-		tmp = Multiset[]
-		tmp.replace(Multiset[:a,:b,:b]).should == Multiset[:a,:b,:b]
-	end
+  it "should be replaced by another Multiset by Multiset#replace" do
+    tmp = Multiset[]
+    tmp.replace(Multiset[:a,:b,:b]).should == Multiset[:a,:b,:b]
+  end
 
   # Comparatory/merging methods
   describe "of two" do
@@ -305,10 +305,10 @@ describe Multiset do
 end
 
 describe Hash, "when converted to a multiset" do
-	it "should regard keys as elements and values as counts by Hash#to_multiset" do
-		{:a => 2, :b => 1}.to_multiset.should == Multiset[:a,:a,:b]
-		{:x => 2, :y => 2, :z => 0}.to_multiset.should == Multiset[:x,:x,:y,:y]
-	end
+  it "should regard keys as elements and values as counts by Hash#to_multiset" do
+    {:a => 2, :b => 1}.to_multiset.should == Multiset[:a,:a,:b]
+    {:x => 2, :y => 2, :z => 0}.to_multiset.should == Multiset[:x,:x,:y,:y]
+  end
 end
 
 describe Multimap do
@@ -347,7 +347,7 @@ describe Multimap do
       lambda{ @mm[:a] = "foobar" }.should raise_error(ArgumentError)
       lambda{ @mm[:a] = 56 }.should raise_error(ArgumentError)
     end
-	
+  
     it "should be duplicated by Multimap#dup" do
       @mm.dup.should == @mm
     end
@@ -526,14 +526,14 @@ describe Multimap do
     end
   end
 
-	describe "being checked its properties" do
+  describe "being checked its properties" do
     before do
       @mm_base = Multimap.new
       @mm_base[:a] = ["foo", "foo", "bar", "hoge", "hoge", "moe"]
       @mm_base[:b] = ["foo", "bar", "hoge", "hoge", "bar"]
-		end
+    end
     
-		# keys, values
+    # keys, values
     it "should return existing (nonzero) keys by Multimap#keys" do
       mm = @mm_base.dup
       mm[:c] = []
@@ -542,9 +542,9 @@ describe Multimap do
     
     it "should return all values by Multimap#values" do
       @mm_base.values.should == {"foo" => 3, "bar" => 3, "hoge" => 4, "moe" => 1}.to_multiset
-		end
+    end
     
-		# empty?
+    # empty?
     it "should return true by Multimap#empty? if and only if it is empty" do
       mm = @mm_base.dup
       mm[:a] = []
@@ -554,8 +554,8 @@ describe Multimap do
       mm[:c] = [:x]
       mm.should_not be_empty
     end
-		
-		# has_key?
+    
+    # has_key?
     it "should return true by Multimap#has_key? if and only if it has the given key" do
       mm = @mm_base.dup
       mm[:c] = []
@@ -565,9 +565,9 @@ describe Multimap do
       mm.should_not have_key(:c)
       mm.should be_member(:d)
       mm.should_not be_member(:x)
-		end
+    end
     
-		# has_value?
+    # has_value?
     it "should return true by Multimap#has_value? if and only if it has the given value" do
       mm = @mm_base.dup
       mm[:c] = []
@@ -577,17 +577,17 @@ describe Multimap do
       mm.should_not have_value("boo")
       mm.should be_value("hoge")
       mm.should_not be_value(:d)
-		end
+    end
     
-		# index
+    # index
     it "should find a value and return a key by Multimap#index" do
       mm = @mm_base.dup
       mm.index("moe").should == :a
       [:a, :b].should be_member(mm.index("hoge"))
       mm.index("boo").should == nil
-		end
+    end
     
-		# values_at
+    # values_at
     it "should find a corresponding values as multisets by Multimap#values_at" do
       mm = @mm_base.dup
       mm[:x] = []
@@ -599,9 +599,9 @@ describe Multimap do
       ]
       
       mm.indexes(:b, :x, :a).should == mm.values_at(:b, :x, :a)
-		end
-		
-		# length, size
+    end
+    
+    # length, size
     it "should return the collect number of entries by Multimap#length/size" do
       mm = @mm_base.dup
       mm.length.should == 11
@@ -609,21 +609,21 @@ describe Multimap do
       mm.length.should == 12
       mm.length.should == mm.size
     end
-	end
+  end
 end
 
 describe Hash, "when converted to a multimap" do
-	it "should regard keys as multimap keys and values as multisets by Hash#to_multimap" do
-		# to_multimap / multimap
-		mm = {:a => [3, 3], :b => [5, 3]}.to_multimap
-		mm[:a].should == Multiset[3, 3]
-		mm[:b].should == Multiset[5, 3]
-	end
-	
-	it "should regard keys as multimap keys and values as multisets by Hash#multimap" do
-		mm = {:a => [3, 3], :b => [5, 3]}.multimap
-		mm[:a].should == Multiset[[3, 3]]
-		mm[:b].should == Multiset[[5, 3]]
-	end
+  it "should regard keys as multimap keys and values as multisets by Hash#to_multimap" do
+    # to_multimap / multimap
+    mm = {:a => [3, 3], :b => [5, 3]}.to_multimap
+    mm[:a].should == Multiset[3, 3]
+    mm[:b].should == Multiset[5, 3]
+  end
+  
+  it "should regard keys as multimap keys and values as multisets by Hash#multimap" do
+    mm = {:a => [3, 3], :b => [5, 3]}.multimap
+    mm[:a].should == Multiset[[3, 3]]
+    mm[:b].should == Multiset[[5, 3]]
+  end
 end
 
