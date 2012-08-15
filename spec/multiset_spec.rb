@@ -1,7 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
-# This version is a direct porting from version 0.202 (not for Rubygems).
-# Unit test code will be added from the next version.
+# Note: NOT ALL METHODS ARE TESTED!
 
 require "multiset"
 
@@ -242,13 +241,11 @@ describe Multiset do
     it "should return sorted array by Multiset#sort / Multiset#sort_with" do
       @ms.sort.should == %w[a a b b b b c d d d]
       @ms.sort{ |a, b| b <=> a }.should == %w[d d d c b b b b a a]
-      fail "Methods in Enumerable should not be called"
       @ms.sort_with{ |a_item, a_count, b_item, b_count| b_count <=> a_count }.should == %w[b b b b d d d a a c]
     end
     
     it "should return sorted array by Multiset#sort_by / Multiset#sort_by_with" do
       @ms.sort_by{ |item| item }.should == %w[a a b b b b c d d d]
-      fail "Methods in Enumerable should not be called"
       @ms.sort_by_with{ |item, count| count }.should == %w[c a a d d d b b b b]
     end
   end

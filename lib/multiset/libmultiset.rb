@@ -1001,17 +1001,8 @@ class Multiset
   # 
   # Same as Multiset#max, but four arguments: "item 1", "number of item 1", "item 2" and "number of item 2" are given to the block.
   def max_with # :yields: item1, count1, item2, count2
-    ret = nil
-    @entries.each_pair do |item, count|
-      if ret == nil
-        ret = [item, count]
-      else
-        if yield(*ret, item, count) < 0
-          ret = [item, count]
-        end
-      end
-    end
-    ret == nil ? nil : ret[0]
+    tmp = @entries.each_pair.max{ |a, b| yield(a[0], a[1], b[0], b[1]) }
+    tmp ? tmp[0] : nil
   end
   
   # Multiset#min と同様ですが、ブロックには「要素1」「要素1の出現数」「要素2」「要素2の出現数」の
@@ -1019,17 +1010,8 @@ class Multiset
   # 
   # Same as Multiset#min, but four arguments: "item 1", "number of item 1", "item 2" and "number of item 2" are given to the block.
   def min_with # :yields: item1, count1, item2, count2
-    ret = nil
-    @entries.each_pair do |item, count|
-      if ret == nil
-        ret = [item, count]
-      else
-        if yield(*ret, item, count) > 0
-          ret = [item, count]
-        end
-      end
-    end
-    ret == nil ? nil : ret[0]
+    tmp = @entries.each_pair.min{ |a, b| yield(a[0], a[1], b[0], b[1]) }
+    tmp ? tmp[0] : nil
   end
   
   # Multiset#minmax と同様ですが、ブロックには「要素1」「要素1の出現数」「要素2」「要素2の出現数」の
@@ -1037,45 +1019,77 @@ class Multiset
   # 
   # Same as Multiset#minmax, but four arguments: "item 1", "number of item 1", "item 2" and "number of item 2" are given to the block.
   def minmax_with # :yields: item1, count1, item2, count2
-    ret_min = nil
-    ret_max = nil
-    @entries.each_pair do |item, count|
-      if ret_min == nil
-        ret_min = [item, count]
-        ret_max = [item, count]
-      else
-        if yield(*ret_min, item, count) > 0
-          ret_min = [item, count]
-        elsif yield(*ret_max, item, count) < 0
-          ret_max = [item, count]
-        end
-      end
-    end
-    ret_min == nil ? [nil, nil] : [ret_min[0], ret_max[0]]
+    tmp = @entries.each_pair.minmax{ |a, b| yield(a[0], a[1], b[0], b[1]) }
+    tmp ? [tmp[0][0], tmp[1][0]] : nil
   end
   
-  # Multiset#max_by と同様ですが、ブロックには要素とその出現数の組が与えられます。
+  # Multiset#max_by と同様ですが、ブロックには要素（重複なし）とその出現数の組が与えられます。
   # 
-  # Same as Multiset#min, but pairs of items and their counts are given to the block.
+  # Same as Multiset#min, but pairs of (non-duplicated) items and their counts are given to the block.
   def max_by_with(&block) # :yields: item
     tmp = @entries.each_pair.max_by(&block)
     tmp ? tmp[0] : nil # if @entries is not empty, tmp must be a two-element array
   end
   
-  # Multiset#min_by と同様ですが、ブロックには要素とその出現数の組が与えられます。
+  # Multiset#min_by と同様ですが、ブロックには要素（重複なし）とその出現数の組が与えられます。
   # 
-  # Same as Multiset#max, but pairs of items and their counts are given to the block.
+  # Same as Multiset#max, but pairs of (non-duplicated) items and their counts are given to the block.
   def min_by_with(&block) # :yields: item
     tmp = @entries.each_pair.min_by(&block)
     tmp ? tmp[0] : nil # if @entries is not empty, tmp must be a two-element array
   end
   
-  # Multiset#minmax_by と同様ですが、ブロックには要素とその出現数の組が与えられます。
+  # Multiset#minmax_by と同様ですが、ブロックには要素（重複なし）とその出現数の組が与えられます。
   # 
-  # Same as Multiset#minmax, but pairs of items and their counts are given to the block.
+  # Same as Multiset#minmax, but pairs of (non-duplicated) items and their counts are given to the block.
   def minmax_by_with(&block) # :yields: item
     tmp = @entries.each_pair.minmax_by(&block)
     tmp[0] ? [tmp[0][0], tmp[1][0]] : nil
+  end
+  
+  # <code>self</code>の要素を並び替えた配列を生成します。
+  # 
+  # Generates an array by sorting the items in <code>self</code>.
+  def sort(&block) # :yields: a, b
+    ret = []
+    @entries.keys.sort(&block).each do |item|
+      ret.fill(item, ret.length, @entries[item])
+    end
+    ret
+  end
+  
+  # Multiset#sortと同様ですが、ブロックには1つの要素が与えられ、その値が小さいものから順に並びます。
+  # 
+  # Same as Multiset#sort, but only one item is given to the block.
+  def sort_by(&block) # :yields: item
+    ret = []
+    @entries.keys.sort_by(&block).each do |item|
+      ret.fill(item, ret.length, @entries[item])
+    end
+    ret
+  end
+
+  # Multiset#sort と同様ですが、ブロックには「要素1」「要素1の出現数」「要素2」「要素2の出現数」の
+  # 4引数が与えられます。
+  # 
+  # Same as Multiset#sort, but four arguments: "item 1", "number of item 1", "item 2" and "number of item 2" are given to the block.
+  def sort_with # :yields: item1, count1, item2, count2
+    ret = []
+    @entries.each_pair.sort{ |a, b| yield(a[0], a[1], b[0], b[1]) }.each do |item_count|
+      ret.fill(item_count[0], ret.length, item_count[1])
+    end
+    ret
+  end
+
+  # Multiset#sort_by と同様ですが、ブロックには要素（重複なし）とその出現数の組が与えられます。
+  # 
+  # Same as Multiset#sort_by, but pairs of (non-duplicated) items and their counts are given to the block.
+  def sort_by_with # :yields: item1, count1, item2, count2
+    ret = []
+    @entries.each_pair.sort_by{ |a| yield(*a) }.each do |item_count|
+      ret.fill(item_count[0], ret.length, item_count[1])
+    end
+    ret
   end
 end
 
