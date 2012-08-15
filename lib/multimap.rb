@@ -448,7 +448,7 @@ class Hash
   # （例）キー<code>:a</code>には<code>:x</code>と<code>:y</code>が1個ずつ、
   # キー<code>:b</code>には<code>:x</code>が2個割り当てられた多重連想配列
   # 
-  # <code>{:a => [:x, :y], :b => [:x, :x]}.to_multiset</code>
+  # <code>{:a => [:x, :y], :b => [:x, :x]}.to_multimap</code>
   # 
   # Generates multiset from <code>self</code>.
   # In generated multiset, values associated with a key are defined by
@@ -458,7 +458,7 @@ class Hash
   # Key <code>:a</code> is associated with values one <code>:x</code> and one <code>:y</code>, and 
   # key <code>:b</code> is associated with values two <code>:x</code>
   # 
-  # <code>{:a => [:x, :y], :b => [:x, :x]}.to_multiset</code>
+  # <code>{:a => [:x, :y], :b => [:x, :x]}.to_multimap</code>
   def to_multimap
     ret = Multimap.new
     self.each_pair{ |key, val| ret[key] = val }
