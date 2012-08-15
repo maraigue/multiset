@@ -1,10 +1,8 @@
 .autotest
 History.txt
-Manifest.txt
 README.txt
 Rakefile
 lib/multiset.rb
-lib/multiset/libmultimap.rb
-lib/multiset/libmultiset.rb
+lib/multimap.rb
 spec/multiset_spec.rb
 spec/spec_helper.rb
