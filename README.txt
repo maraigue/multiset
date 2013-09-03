@@ -25,7 +25,7 @@ Multisets are typically used for counting elements and their appearances in coll
  
  # Counting the appearances of characters in a string
  m = Multiset.new
- "abracadabra".each_char do |c| # replace with 'each_byte' in Ruby 1.8.6 or before
+ "abracadabra".each_char do |c| # replace with 'each_byte' in Ruby 1.8.6 or earlier
    m << c
  end
  p m
@@ -35,7 +35,7 @@ Multisets are typically used for counting elements and their appearances in coll
  Multiset.new("abracadabra".split(//))
  # => #<Multiset:#5 "a", #2 "b", #2 "r", #1 "c", #1 "d">
  
- # The same, but available with Ruby 1.8.7 or after
+ # The same, but available with Ruby 1.8.7 or later
  Multiset.new("abracadabra".each_char)
  # => #<Multiset:#5 "a", #2 "b", #2 "r", #1 "c", #1 "d">
 
