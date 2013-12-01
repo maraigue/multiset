@@ -204,3 +204,13 @@
   * Multiset#minmax_by
   * Multiset#sort
   * Multiset#sort_by
+
+=== 0.4.1 / 2013-12-02
+
+(ja)
+* Multiset#each_**** および Multimap#each_**** が、ブロックなしで呼び出された場合にEnumeratorを返すようにした。
+  （ドキュメントに書いたのに実装を忘れてました…）
+
+(en)
+* Multiset#each_**** and Multimap#each_**** returns an Enumerator if called without a block.
+  (Forgot implementation although documented...)
