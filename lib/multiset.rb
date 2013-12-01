@@ -18,7 +18,7 @@ VERSION = "0.4.0"
 # Unlike ordinary set(see Ruby documentation for "set" library),
 # multiset can contain two or more same items.
 #
-# Most methods' names are same as those of Set class, and all other than
+# Most methods’ names are same as those of Set class, and all other than
 # a few methods in Set class is implemented on Multiset class.
 #
 # * <code>Set[:a,:b,:c,:b,:b,:c] => #<Set: {:b, :c, :a}></code>
@@ -583,10 +583,14 @@ class Multiset
   # a Multiset with 100 times "a" will call the given block for 100 times for Multiset#each,
   # while only once for Multiset#each_pair.
   def each
-    @entries.each_pair do |item, count|
-      count.times{ yield item }
+    if block_given?
+      @entries.each_pair do |item, count|
+        count.times{ yield item }
+      end
+      self
+    else
+      Enumerator.new(self, :each)
     end
-    self
   end
   
   # <code>self</code>に含まれるすべての要素について、重複を許さずに繰り返します。
@@ -597,8 +601,12 @@ class Multiset
   # Returns <code>self</code>.
   # An Enumerator will be returned if no block is given.
   def each_item(&block) # :yields: item
-    @entries.each_key(&block)
-    self
+    if block
+      @entries.each_key(&block)
+      self
+    else
+      @entries.each_key
+    end
   end
   
   # <code>self</code>に含まれるすべての要素（重複なし）とその個数について繰り返します。
@@ -609,8 +617,12 @@ class Multiset
   # Returns <code>self</code>.
   # An Enumerator will be returned if no block is given.
   def each_with_count(&block) # :yields: item, count
-    @entries.each_pair(&block)
-    self
+    if block
+      @entries.each_pair(&block)
+      self
+    else
+      @entries.each_pair
+    end
   end
   alias :each_pair :each_with_count
   

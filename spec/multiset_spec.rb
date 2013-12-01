@@ -201,6 +201,28 @@ describe Multiset do
       result[:count_sum].should == 10
     end
     
+    it "should return an Enumerator with Multiset#each_****" do
+      @ms.each.should be_kind_of(Enumerator)
+      @ms.each_item.should be_kind_of(Enumerator)
+      @ms.each_pair.should be_kind_of(Enumerator)
+      @ms.each_with_count.should be_kind_of(Enumerator)
+    end
+    
+    it "should return an Enumerator with Multiset#each_**** whose behavior is the same as original method" do
+      e = @ms.each
+      e.to_a.should == @ms.to_a
+      
+      e = @ms.each_item
+      a = []; @ms.each_item{ |x| a << x }
+      b = []; e.each{ |x| b << x }
+      b.should == a
+      
+      e = @ms.each_with_count
+      a = []; @ms.each_with_count{ |x, i| a << [x, i] }
+      b = []; e.each{ |x, i| b << [x, i] }
+      b.should == a
+    end
+    
     it "should return a new Multiset by the specified condition with Multiset#map / Multiset#collect" do
       @ms.map{ |item| item * 2 }.should == Multiset.new(%w'aa aa bb bb bb bb cc dd dd dd')
     end
@@ -298,7 +320,7 @@ describe Multiset do
       tmp.should == Multiset.new(%w'b b b c c d')
       
       tmp = @ms1.dup
-      tmp.delete_all("e") # nothing deleted because `tmp' does not contain "e"
+      tmp.delete_all("e") # nothing deleted because ``tmp'' does not contain "e"
       tmp.should == @ms1
     end
   end
@@ -389,6 +411,37 @@ describe Multimap do
       @mm = Multimap.new
       @mm[:a] = ["foo", "foo", "bar", "hoge", "hoge", "moe"]
       @mm[:b] = ["foo", "bar", "hoge", "hoge", "bar"]
+    end
+    
+    it "should return an Enumerator with Multimap#each_****" do
+      @mm.each.should be_kind_of(Enumerator)
+      @mm.each_pair.should be_kind_of(Enumerator)
+      @mm.each_key.should be_kind_of(Enumerator)
+      @mm.each_value.should be_kind_of(Enumerator)
+      @mm.each_pair_list.should be_kind_of(Enumerator)
+      @mm.each_pair_with.should be_kind_of(Enumerator)
+    end
+    
+    it "should return an Enumerator with Multimap#each_**** whose behavior is the same as original method" do
+      e = @mm.each_key
+      a = []; @mm.each_key{ |k| a << k }
+      b = []; e.each{ |k| b << k }
+      b.should == a
+      
+      e = @mm.each_value
+      a = []; @mm.each_value{ |v| a << v }
+      b = []; e.each{ |v| b << v }
+      b.should == a
+      
+      e = @mm.each_pair_list
+      a = []; @mm.each_pair_list{ |k, v| a << [k, v] }
+      b = []; e.each{ |k, v| b << [k, v] }
+      b.should == a
+      
+      e = @mm.each_pair_with
+      a = []; @mm.each_pair_with{ |k, v, c| a << [k, v, c] }
+      b = []; e.each{ |k, v, c| b << [k, v, c] }
+      b.should == a
     end
     
     it "should be correctly iterated by 'each_pair'" do

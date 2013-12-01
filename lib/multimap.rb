@@ -17,7 +17,7 @@ require "multiset"
 #(see Ruby documentation for "Hash" class),
 #multimap can contain two or more items for a key.
 #
-#Most methods' names are same as those of Hash class, and all other than
+#Most methods’ names are same as those of Hash class, and all other than
 #a few methods in Hash class is implemented on Multimap class.
 
 class Multimap
@@ -217,13 +217,17 @@ class Multimap
   # Iterates for each pair of a key and a value in <code>self</code>.
   # Returns <code>self</code>.
   def each_pair
-    cleanup
-    @assoc.each_pair do |key, value_list|
-      value_list.each do |single_value|
-        yield key, single_value
+    if block_given?
+      cleanup
+      @assoc.each_pair do |key, value_list|
+        value_list.each do |single_value|
+          yield key, single_value
+        end
       end
+      self
+    else
+      Enumerator.new(self, :each_pair)
     end
-    self
   end
   alias :each :each_pair
   
@@ -236,13 +240,17 @@ class Multimap
   # (key, one value associated with the key, numbers of that value
   # associated with the key). Returns <code>self</code>.
   def each_pair_with
-    cleanup
-    @assoc.each_pair do |key, value_list|
-      value_list.each_pair do |a_value, count|
-        yield key, a_value, count
+    if block_given?
+      cleanup
+      @assoc.each_pair do |key, value_list|
+        value_list.each_pair do |a_value, count|
+          yield key, a_value, count
+        end
       end
+      self
+    else
+      Enumerator.new(self, :each_pair_with)
     end
-    self
   end
   
   # <code>self</code>のすべてのキーと、そのキーに割り当てられた
@@ -272,9 +280,14 @@ class Multimap
   # 
   # Iterates for each value in <code>self</code>. Returns <code>self</code>.
   def each_value(&block) # :yields: single_value
-    cleanup
-    @assoc.each_value do |value_list|
-      value_list.each &block
+    if block_given?
+      cleanup
+      @assoc.each_value do |value_list|
+        value_list.each &block
+      end
+      self
+    else
+      Enumerator.new(self, :each_value)
     end
   end
   
