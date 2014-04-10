@@ -230,7 +230,11 @@ describe Multiset do
     it "should return a new Multiset by the specified condition with Multiset#map_with / Multiset#collect_with" do
       @ms.map_with{ |item, count| [item * 2, count * 2] }.should == Multiset.new(%w'aa aa aa aa bb bb bb bb bb bb bb bb cc cc dd dd dd dd dd dd')
     end
-    
+
+    it "should return nil for an empty Multiset with Multiset#rand" do
+      Multiset.new.rand.should == nil
+    end
+
     it "should return the maximum/mininum value by max/min/minmax" do
       @ms.max.should == "d"
       @ms.min.should == "a"
