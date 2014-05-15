@@ -3,7 +3,7 @@
 
 require "enumerator"
 require "multimap"
-VERSION = "0.4.1"
+VERSION = "0.5.0"
 
 #==概要(Basic information)
 #
@@ -686,9 +686,11 @@ class Multiset
   
   # <code>self</code>の要素を無作為に1つ選んで返します。
   # すべての要素は等確率で選ばれます。
+  # 空のmultisetに対して呼び出した場合は<code>nil</code>を返します。
   #
   # Returns one item in <code>self</code> randomly.
   # All items are selected with the same probability.
+  # Returns <code>nil</code> in case the multiset is empty.
   def sample
     return nil if empty?
     pos = Kernel.rand(self.size)
