@@ -690,6 +690,7 @@ class Multiset
   # Returns one item in <code>self</code> randomly.
   # All items are selected with the same probability.
   def sample
+    return nil if empty?
     pos = Kernel.rand(self.size)
     @entries.each_pair do |item, count|
       pos -= count
