@@ -214,3 +214,12 @@
 (en)
 * Multiset#each_**** and Multimap#each_**** returns an Enumerator if called without a block.
   (Forgot implementation although documented...)
+
+=== 0.5.0 / 2014-05-16
+
+(ja)
+* 空のmultisetに対して Multiset#sample を呼び出した場合、nilを返すようにした。（Array#sampleと挙動を合わせました）
+
+(en)
+* Multiset#sample returns nil in case the multiset is empty. (The same behavior as Array#sample.)
+
