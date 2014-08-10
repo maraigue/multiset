@@ -3,7 +3,7 @@
 
 require "enumerator"
 require "multimap"
-VERSION = "0.5.0"
+VERSION = "0.5.1"
 
 #==概要(Basic information)
 #

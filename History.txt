@@ -223,3 +223,10 @@
 (en)
 * Multiset#sample returns nil in case the multiset is empty. (The same behavior as Array#sample.)
 
+=== 0.5.1 / 2014-08-10
+
+(ja)
+* いくつかのメソッドで、RDocのドキュメントに間違いがあったので修正。
+
+(en)
+* Fixed argument descriptions of some methods in the RDoc document.
