@@ -807,7 +807,7 @@ class Multiset
   # ブロックからの返り値をキーとして値を対応付けたMultimapを返します。
   #
   # Classify items in <code>self</code> by returned value from block.
-  # Returns a Multimap whose values are associated with keys. Keys'
+  # Returns a Multimap whose values are associated with keys. Keys
   # are defined by returned value from given block.
   def group_by
     ret = Multimap.new
@@ -861,7 +861,7 @@ class Multiset
   # Multiset#findと同じですが、ブロックには<code>self</code>の要素とその個数の組が与えられます。
   #
   # The same as Multiset#find, but pairs of (non-duplicate) items and their counts are given to the block.
-  def find_with(ifnone = nil, &block) # :yields: item
+  def find_with(ifnone = nil, &block) # :yields: item, count
     if block
       find_with_(ifnone, &block)
     else
@@ -906,7 +906,7 @@ class Multiset
   # Multiset#find_allと同じですが、ブロックには<code>self</code>の要素とその個数の組が与えられます。
   #
   # The same as Multiset#find_all, but pairs of (non-duplicate) items and their counts are given to the block.
-  def find_all_with(&block) # :yields: item
+  def find_all_with(&block) # :yields: item, count
     if block
       find_all_with_(&block)
     else
@@ -922,7 +922,7 @@ class Multiset
     end
     ret
   end
-  private :find_all_
+  private :find_all_with_
   
   # <code>pattern</code>の条件を満たした（<code>pattern</code> === item）要素のみを集めた多重集合を返します。
   # ブロックが与えられている場合は、さらにその結果を適用した結果を返します。
@@ -1043,7 +1043,7 @@ class Multiset
   # Multiset#max_by と同様ですが、ブロックには要素（重複なし）とその出現数の組が与えられます。
   # 
   # Same as Multiset#min, but pairs of (non-duplicated) items and their counts are given to the block.
-  def max_by_with(&block) # :yields: item
+  def max_by_with(&block) # :yields: item, count
     tmp = @entries.each_pair.max_by(&block)
     tmp ? tmp[0] : nil # if @entries is not empty, tmp must be a two-element array
   end
@@ -1051,7 +1051,7 @@ class Multiset
   # Multiset#min_by と同様ですが、ブロックには要素（重複なし）とその出現数の組が与えられます。
   # 
   # Same as Multiset#max, but pairs of (non-duplicated) items and their counts are given to the block.
-  def min_by_with(&block) # :yields: item
+  def min_by_with(&block) # :yields: item, count
     tmp = @entries.each_pair.min_by(&block)
     tmp ? tmp[0] : nil # if @entries is not empty, tmp must be a two-element array
   end
@@ -1059,7 +1059,7 @@ class Multiset
   # Multiset#minmax_by と同様ですが、ブロックには要素（重複なし）とその出現数の組が与えられます。
   # 
   # Same as Multiset#minmax, but pairs of (non-duplicated) items and their counts are given to the block.
-  def minmax_by_with(&block) # :yields: item
+  def minmax_by_with(&block) # :yields: item, count
     tmp = @entries.each_pair.minmax_by(&block)
     tmp[0] ? [tmp[0][0], tmp[1][0]] : nil
   end
