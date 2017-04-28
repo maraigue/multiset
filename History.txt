@@ -230,3 +230,13 @@
 
 (en)
 * Fixed argument descriptions of some methods in the RDoc document.
+
+=== 0.5.3 / 2017-04-28
+
+(ja)
+* ドキュメントを修正（特に英語の記述について）。
+* Multimap#each_key が、ブロックを与えない場合にEnumeratorを返すようにした。
+
+(en)
+* Fixed documentation, especially in English writing.
+* Multimap#each_key returns an Enumerator if no block is given.

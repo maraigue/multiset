@@ -22,7 +22,7 @@ require "multimap"
 # メソッド名は基本的にSetクラスに合わせてあります。
 
 class Multiset
-  VERSION = "0.5.2"
+  VERSION = "0.5.3"
 
   include Enumerable
   
