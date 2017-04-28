@@ -61,46 +61,46 @@ describe Multiset do
       tmp2 = Multiset.new(%w'a a a a b b b c c d')
       tmp3 = Multiset.new(%w'a a a b b b c c d')
       
-      (@ms1 == @ms2).should be_false
-      (@ms1 == tmp1).should be_false
-      (@ms1 == tmp2).should be_true
-      (@ms1 == tmp3).should be_false
+      (@ms1 == @ms2).should be false
+      (@ms1 == tmp1).should be false
+      (@ms1 == tmp2).should be true
+      (@ms1 == tmp3).should be false
       
-      (@ms1.subset?(@ms2)).should be_false
-      (@ms1.subset?(tmp1)).should be_true
-      (@ms1.subset?(tmp2)).should be_true
-      (@ms1.subset?(tmp3)).should be_false
-      (@ms2.subset?(@ms1)).should be_false
-      (tmp1.subset?(@ms1)).should be_false
-      (tmp2.subset?(@ms1)).should be_true
-      (tmp3.subset?(@ms1)).should be_true
+      (@ms1.subset?(@ms2)).should be false
+      (@ms1.subset?(tmp1)).should be true
+      (@ms1.subset?(tmp2)).should be true
+      (@ms1.subset?(tmp3)).should be false
+      (@ms2.subset?(@ms1)).should be false
+      (tmp1.subset?(@ms1)).should be false
+      (tmp2.subset?(@ms1)).should be true
+      (tmp3.subset?(@ms1)).should be true
       
-      (@ms1.proper_subset?(@ms2)).should be_false
-      (@ms1.proper_subset?(tmp1)).should be_true
-      (@ms1.proper_subset?(tmp2)).should be_false
-      (@ms1.proper_subset?(tmp3)).should be_false
-      (@ms2.proper_subset?(@ms1)).should be_false
-      (tmp1.proper_subset?(@ms1)).should be_false
-      (tmp2.proper_subset?(@ms1)).should be_false
-      (tmp3.proper_subset?(@ms1)).should be_true
+      (@ms1.proper_subset?(@ms2)).should be false
+      (@ms1.proper_subset?(tmp1)).should be true
+      (@ms1.proper_subset?(tmp2)).should be false
+      (@ms1.proper_subset?(tmp3)).should be false
+      (@ms2.proper_subset?(@ms1)).should be false
+      (tmp1.proper_subset?(@ms1)).should be false
+      (tmp2.proper_subset?(@ms1)).should be false
+      (tmp3.proper_subset?(@ms1)).should be true
       
-      (@ms1.superset?(@ms2)).should be_false
-      (@ms1.superset?(tmp1)).should be_false
-      (@ms1.superset?(tmp2)).should be_true
-      (@ms1.superset?(tmp3)).should be_true
-      (@ms2.superset?(@ms1)).should be_false
-      (tmp1.superset?(@ms1)).should be_true
-      (tmp2.superset?(@ms1)).should be_true
-      (tmp3.superset?(@ms1)).should be_false
+      (@ms1.superset?(@ms2)).should be false
+      (@ms1.superset?(tmp1)).should be false
+      (@ms1.superset?(tmp2)).should be true
+      (@ms1.superset?(tmp3)).should be true
+      (@ms2.superset?(@ms1)).should be false
+      (tmp1.superset?(@ms1)).should be true
+      (tmp2.superset?(@ms1)).should be true
+      (tmp3.superset?(@ms1)).should be false
       
-      (@ms1.proper_superset?(@ms2)).should be_false
-      (@ms1.proper_superset?(tmp1)).should be_false
-      (@ms1.proper_superset?(tmp2)).should be_false
-      (@ms1.proper_superset?(tmp3)).should be_true
-      (@ms2.proper_superset?(@ms1)).should be_false
-      (tmp1.proper_superset?(@ms1)).should be_true
-      (tmp2.proper_superset?(@ms1)).should be_false
-      (tmp3.proper_superset?(@ms1)).should be_false
+      (@ms1.proper_superset?(@ms2)).should be false
+      (@ms1.proper_superset?(tmp1)).should be false
+      (@ms1.proper_superset?(tmp2)).should be false
+      (@ms1.proper_superset?(tmp3)).should be true
+      (@ms2.proper_superset?(@ms1)).should be false
+      (tmp1.proper_superset?(@ms1)).should be true
+      (tmp2.proper_superset?(@ms1)).should be false
+      (tmp3.proper_superset?(@ms1)).should be false
     end
     
     it "should compute the intersection correctly" do
@@ -135,12 +135,12 @@ describe Multiset do
     end
     
     it "should have the same result between Multiset\#{all?, any?, none?, one?} and Enumerable\#{all?, any?, none?, one?}" do
-      @ms.all?{ |x| x == "a" }.should be_false
-      @ms.any?{ |x| x == "a" }.should be_true
-      @ms.none?{ |x| x == "a" }.should be_false
-      @ms.none?{ |x| x.instance_of?(Integer) }.should be_true
-      @ms.one?{ |x| x == "a" }.should be_false
-      @ms.one?{ |x| x == "c" }.should be_true
+      @ms.all?{ |x| x == "a" }.should be false
+      @ms.any?{ |x| x == "a" }.should be true
+      @ms.none?{ |x| x == "a" }.should be false
+      @ms.none?{ |x| x.instance_of?(Integer) }.should be true
+      @ms.one?{ |x| x == "a" }.should be false
+      @ms.one?{ |x| x == "c" }.should be true
     end
     
     it "should have the same result between Multiset#count and Enumerable#count" do
