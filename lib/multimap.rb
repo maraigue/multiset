@@ -270,8 +270,12 @@ class Multimap
   # <code>self</code>のすべてのキーについて繰り返します。
   # <code>self</code>を返します。
   def each_key(&block) # :yields: key
-    cleanup
-    @assoc.each_key &block
+    if block_given?
+      cleanup
+      @assoc.each_key &block
+    else
+      Enumerator.new(self, :each_key)
+    end
   end
   
   # Iterates for each value in <code>self</code>. Returns <code>self</code>.
